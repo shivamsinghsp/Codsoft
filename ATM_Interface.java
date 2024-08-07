@@ -1,116 +1,79 @@
-import java.util.*;
-
-
-
-class UserAccount{
-    float Balance = 1000;
-    int PIN = 5694;
-}
+import java.util.Scanner;
 
 class ATM{
-   
-    UserAccount ua = new UserAccount();
-
-    public void CheckPin(){
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter the pin: ");
-        int enteredPin = sc.nextInt();
-
-        // check if pin is correct or not!!!
-        if(enteredPin == ua.PIN){
-            menu();
-        }
-        else
-        {
-            System.out.println("You have entered wrong pin");
-            CheckPin();
-        }
-    }
-
-    public void menu(){
-
-        System.out.println("Please enter your choise:");
-        System.out.println("<------------------------------------------------------------>");
-        System.out.println("1. Check Bank Balance");
-        System.out.println("2. Withdraw Money");
-        System.out.println("3. Deposit Money");
-        System.out.println("4. Exit");
-
-        Scanner sc = new Scanner(System.in);
-        int option = sc.nextInt();
-
-        if(option == 1)
-        {
-            checkBalance();
-        }
-        else if(option == 2){
-            withdrawMoney();
-        }
-        else if(option==3)
-        {
-            depositMoney();    
-        }
-        else if(option ==4)
-        {
-            System.out.println("<----------Thank you---------->");
-        }
-        else {
-            System.out.println("Enter a valid choise");
-            menu();
-        }
-    }
-
-
-    // check bank balance 
-
-public void checkBalance(){
-    System.out.print("Balance:  " + ua.Balance);
-    menu();
-}
-
-// withdraw money from ATM 
-
-public void withdrawMoney()
-{
-    System.out.print("Enter the amount to withdraw");
+  private double balance;
+  ATM(){
     Scanner sc = new Scanner(System.in);
-    float Amount = sc.nextInt();
-
-    if(Amount > ua.Balance)
-    {
-        System.out.println("Unsufficient Balance");
+    System.out.print("Enter your pin: ");
+    int pin  = sc.nextInt();
+    UserAccount ua = new UserAccount(pin);
+     balance = ua.getAccountBalance();
+     double amount;
+     boolean running = true;
+     while(running){
+        System.out.println("Enter your choice: ");
+        System.out.println("1. Withdraw Amount");
+        System.out.println("2. Deposit Amount");
+        System.out.println("3. Check Account Balance");
+        System.out.println("4. Exit");
+        int choice = sc.nextInt();
+        switch(choice) {
+         case 1: 
+         System.out.println("Enter amount: ");
+         amount = sc.nextDouble();
+         withdraw(amount);
+         break;
+         case 2:
+         System.out.println("Enter amount: ");
+         amount = sc.nextDouble();
+         deposit(amount);
+         break;
+         case 3:
+         checkBalance();
+         break;
+         case 4:
+         running = false;
+         break;
+         default:
+         System.out.println("Invalid choice. Please try again.");
+        }
+   }
+  }
+   public  void withdraw(double amount){
+    if(amount>balance){
+      System.out.println("You have not enough balance.");
+      return;
+    } 
+   balance -= amount;
+   System.out.println("Successfully withdrawn");
+   }
+   public  void deposit(double amount){
+    balance += amount;
+    System.out.println("Successfully deposited");
+   }
+   public  void checkBalance(){
+   System.out.println(balance);
+   }
+  }
+class UserAccount{
+  private final int correctpin = 2654;
+   private double accountBalance;
+  UserAccount(int pin){
+    if(this.correctpin != pin){
+      System.out.print("Your entered pin is wrong");
+      System.exit(0);
     }
-    else{
-        ua.Balance  = ua.Balance-Amount;
-        System.out.println("Money withdrwan Successfully!");   
+    accountBalance = 5000;
+}  
+    public double getAccountBalance(){
+      return accountBalance;
     }
-    menu();
-}
-
-
-// deposit money in Bank 
-public void depositMoney()
-{
-System.out.print("Enter the amount");
-Scanner sc = new Scanner(System.in);
-    float Amount  = sc.nextInt();
-
-    ua.Balance = ua.Balance + Amount;
-    System.out.println("Money Deposited Successfully!");
-    System.out.println();
-    menu();
-
-}
-}
-public class ATM_Interface{
+  
+  }
+  
+public class ATMInterface {
     public static void main(String[] args) {
-        ATM r = new ATM();
-        r.CheckPin();
+     new ATM();
+       
     }
 }
-
-
-
-
-    
